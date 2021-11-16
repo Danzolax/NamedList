@@ -7,12 +7,10 @@ import com.zolax.nameslist.data.repositories.BaseRepository
 import com.zolax.nameslist.utils.Resource
 import com.zolax.nameslist.utils.delayEach
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
+import kotlin.random.Random
 
 class NamesListViewModel(private val repository: BaseRepository) : ViewModel() {
     private val _names = MutableLiveData<Resource<List<String>>>()
@@ -25,11 +23,11 @@ class NamesListViewModel(private val repository: BaseRepository) : ViewModel() {
     }
 
 
-    public fun getNames() {
+    internal fun getNames() {
         val names = mutableListOf<String>()
         compositeDisposable.add(
             repository.getNames()
-                .delayEach(200, TimeUnit.MILLISECONDS)
+                .delayEach(Random.nextLong(1,100), TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .map { t -> t }

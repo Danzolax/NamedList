@@ -11,7 +11,7 @@
         android:name=".App"
         android:theme="@style/Theme.NamesList">
         <activity
-            android:name=".ui.namesList.MainActivity"
+            android:name=".ui.namesList.NamesListActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -3,31 +3,40 @@ package com.zolax.nameslist.ui.namesList
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.get
+import androidx.core.view.isVisible
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import com.zolax.nameslist.R
-import com.zolax.nameslist.databinding.ActivityMainBinding
+import com.zolax.nameslist.databinding.ActivityNamesListBinding
 import com.zolax.nameslist.utils.Resource
 import com.zolax.nameslist.utils.appComponent
 import com.zolax.nameslist.utils.viewBinding
+import timber.log.Timber
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class NamesListActivity : AppCompatActivity() {
 
-    private val binding: ActivityMainBinding by viewBinding(ActivityMainBinding::inflate)
+    private val binding: ActivityNamesListBinding by viewBinding(ActivityNamesListBinding::inflate)
 
     @Inject
     lateinit var factory: NamesListViewModelFactory
+
+    private val namesAdapter = NamesListAdapter()
 
     private val viewModel: NamesListViewModel by viewModels() { factory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         appComponent.inject(this)
+        initAdapters()
         initObservers()
         viewModel.getNames()
+    }
 
+    private fun initAdapters() {
+        binding.namesListRv.apply {
+            adapter = namesAdapter
+            layoutManager = LinearLayoutManager(this@NamesListActivity)
+        }
     }
 
     private fun initObservers() {
@@ -40,15 +49,13 @@ class MainActivity : AppCompatActivity() {
                 Resource.Loading -> showLoading(true)
                 is Resource.Success -> {
                     showLoading(false)
-                    binding.text.text = result.data.toString()
+                    namesAdapter.names = result.data
                 }
             }
         })
     }
 
     private fun showLoading(isShown: Boolean) {
-        if (isShown) {
-            binding.text.text = "Loading"
-        }
+        binding.progressLoading.isVisible = isShown
     }
 }
