@@ -3,6 +3,8 @@ package com.zolax.nameslist.ui.namesList
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import com.google.android.material.snackbar.Snackbar
 import com.zolax.nameslist.R
 import com.zolax.nameslist.databinding.ActivityMainBinding
@@ -18,7 +20,7 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var factory: NamesListViewModelFactory
 
-    private val viewModel: NamesListViewModel by viewModels()
+    private val viewModel: NamesListViewModel by viewModels() { factory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,11 +31,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initObservers() {
-        viewModel.names.observe(this,{result ->
-            when(result){
+        viewModel.names.observe(this, { result ->
+            when (result) {
                 is Resource.Error -> {
                     showLoading(false)
-                    Snackbar.make(binding.root,"Error",Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(binding.root, "Error", Snackbar.LENGTH_SHORT).show()
                 }
                 Resource.Loading -> showLoading(true)
                 is Resource.Success -> {
@@ -45,7 +47,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showLoading(isShown: Boolean) {
-        if (isShown){
+        if (isShown) {
             binding.text.text = "Loading"
         }
     }
