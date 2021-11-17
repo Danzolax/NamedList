@@ -71,6 +71,7 @@ class NamesListActivity : AppCompatActivity() {
         viewModel.names.observe(this, { result ->
             when (result) {
                 is Resource.Error -> {
+                    result.error.printStackTrace()
                     showLoading(false)
                     Snackbar.make(binding.root, "Error", Snackbar.LENGTH_SHORT).show()
                 }

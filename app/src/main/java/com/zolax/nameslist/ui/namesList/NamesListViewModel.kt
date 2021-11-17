@@ -31,9 +31,11 @@ class NamesListViewModel(private val repository: BaseRepository) : ViewModel() {
                 .delayEach(Random.nextLong(1, 20), TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .map { t -> t }
                 .doOnSubscribe { _names.value = Resource.Loading }
-                .doOnError { e -> _names.value = Resource.Error(e) }
+                .doOnError { e ->
+                    _names.value = Resource.Error(e)
+                    e.printStackTrace()
+                }
                 .doOnComplete { _names.value = Resource.Success(names) }
                 .subscribe { name ->
                     names.add(name)
@@ -49,11 +51,10 @@ class NamesListViewModel(private val repository: BaseRepository) : ViewModel() {
         compositeDisposable.clear()
         compositeDisposable.add(
             repository.getNames()
-                .delay(2,TimeUnit.SECONDS)
+                .delay(2, TimeUnit.SECONDS)
                 .delayEach(Random.nextLong(1, 20), TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .map { t -> t }
                 .filter {
                     it.lowercase(Locale.getDefault())
                         .startsWith(pattern.lowercase(Locale.getDefault()))
