@@ -2,6 +2,6 @@ package com.zolax.nameslist
 
 
 
-class NamesListViewModelTest {
+class ExampleAndroidTest {
 
     }

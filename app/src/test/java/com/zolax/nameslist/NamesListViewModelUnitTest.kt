@@ -32,7 +32,7 @@ import org.robolectric.Shadows.shadowOf
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = Application::class, manifest = Config.NONE)
-class ExampleUnitTest {
+class NamesListViewModelUnitTest {
 
 
     private lateinit var viewModel: NamesListViewModel
