@@ -2,6 +2,10 @@ package com.zolax.nameslist.ui.namesList
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.widget.SearchView
+import android.widget.SearchView.OnQueryTextListener
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,8 +14,9 @@ import com.zolax.nameslist.databinding.ActivityNamesListBinding
 import com.zolax.nameslist.utils.Resource
 import com.zolax.nameslist.utils.appComponent
 import com.zolax.nameslist.utils.viewBinding
-import timber.log.Timber
 import javax.inject.Inject
+import android.widget.Toast
+
 
 class NamesListActivity : AppCompatActivity() {
 
@@ -20,7 +25,9 @@ class NamesListActivity : AppCompatActivity() {
     @Inject
     lateinit var factory: NamesListViewModelFactory
 
-    private val namesAdapter = NamesListAdapter()
+
+    @Inject
+    lateinit var namesAdapter: NamesListAdapter
 
     private val viewModel: NamesListViewModel by viewModels() { factory }
 
@@ -28,8 +35,29 @@ class NamesListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         appComponent.inject(this)
         initAdapters()
+        initSearch()
         initObservers()
         viewModel.getNames()
+    }
+
+    private fun initSearch() {
+        binding.searchView.setOnQueryTextListener(object : OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let {
+                    viewModel.getFilteredNames(it)
+                }
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let {
+                    viewModel.getFilteredNames(it)
+                }
+                return false
+            }
+
+        })
+
     }
 
     private fun initAdapters() {
@@ -48,8 +76,12 @@ class NamesListActivity : AppCompatActivity() {
                 }
                 Resource.Loading -> showLoading(true)
                 is Resource.Success -> {
+                    val names = result.data
                     showLoading(false)
-                    namesAdapter.names = result.data
+                    if (names.isEmpty()) Snackbar.make(binding.root, "Empty", Snackbar.LENGTH_SHORT)
+                        .show()
+                    else namesAdapter.names = names
+
                 }
             }
         })

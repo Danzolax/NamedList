@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.zolax.nameslist.databinding.ItemNamesListRvBinding
-import timber.log.Timber
 
 class NamesListAdapter() : RecyclerView.Adapter<NamesListAdapter.NamesListViewHolder>() {
     inner class NamesListViewHolder(private val binding: ItemNamesListRvBinding) :
@@ -43,9 +42,9 @@ class NamesListAdapter() : RecyclerView.Adapter<NamesListAdapter.NamesListViewHo
     )
 
 
-    override fun onBindViewHolder(holder: NamesListViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: NamesListViewHolder, position: Int) =
         holder.bindItemView(names[position])
-    }
+
 
     override fun getItemCount() = names.size
 }

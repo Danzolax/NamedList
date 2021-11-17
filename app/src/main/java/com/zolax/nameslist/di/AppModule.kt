@@ -8,7 +8,7 @@ import dagger.Module
 import dagger.Provides
 
 
-@Module(includes = [DataModule::class])
+@Module(includes = [DataModule::class, UiModule::class])
 object AppModule {
 
 

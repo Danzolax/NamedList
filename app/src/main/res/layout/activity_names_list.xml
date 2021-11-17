@@ -6,6 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".ui.namesList.NamesListActivity">
 
+    <SearchView
+        android:id="@+id/search_view"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:queryHint="Enter name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <ProgressBar
         android:id="@+id/progress_loading"
         android:layout_width="wrap_content"
@@ -18,11 +27,11 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/names_list_rv"
         android:layout_width="match_parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:listitem="@layout/item_names_list_rv"
-        android:layout_height="0dp"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_view"
+        tools:listitem="@layout/item_names_list_rv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
